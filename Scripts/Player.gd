@@ -14,6 +14,7 @@ var _input_vector_dict = {
 	"ui_right": Vector2.RIGHT
 }
 var _frozen: bool = false
+var _forced_position = null
 
 onready var _tween: Tween = $Tween
 onready var _animated_sprite: AnimatedSprite = $AnimatedSprite
@@ -107,4 +108,17 @@ func _on_tween_completed(_object, _key):
 	self._moving = false
 	self._animated_sprite.stop()
 	self._animated_sprite.set_frame(0)
+
+	if self._forced_position:
+		self.position = self._forced_position
+		self._forced_position = null
+		self.stop_censor_camera()
+
+func force_position(forced_position):
+	_forced_position = forced_position
+
+func censor_camera():
+	$Camera2D/ColorRect.visible = true
 	
+func stop_censor_camera():
+	$Camera2D/ColorRect.visible = false

@@ -3,10 +3,13 @@
 [ext_resource path="res://Levels/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scripts/World.gd" type="Script" id=5]
 
-[node name="World" type="Node2D"]
+[node name="World" type="Node2D" groups=[
+"world",
+]]
 script = ExtResource( 5 )
 
 [node name="Player" parent="." groups=[
 "player",
 ] instance=ExtResource( 2 )]
-position = Vector2( 64, 128 )
+
+[node name="Level" type="Node" parent="."]
