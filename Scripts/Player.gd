@@ -104,19 +104,18 @@ func get_frozen():
 func _on_tween_started(_object, _key):
 	self._moving = true
 	
+	if self._forced_position:
+		self._tween.stop_all()
+		self.censor_camera()
+	
 func _on_tween_completed(_object, _key):
+	self.stop_moving()
+	
+func stop_moving():
 	self._moving = false
 	self._animated_sprite.stop()
 	self._animated_sprite.set_frame(0)
-
-	if self._forced_position:
-		self.position = self._forced_position
-		self._forced_position = null
-		self.stop_censor_camera()
-
-func force_position(forced_position):
-	_forced_position = forced_position
-
+	
 func censor_camera():
 	$Camera2D/ColorRect.visible = true
 	

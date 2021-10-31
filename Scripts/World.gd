@@ -5,14 +5,13 @@ var _level
 func _ready():
 	self.load_default_level()
 	
-	
 func load_default_level():
 	self.load_level("Level1")
 	$Player.position = Vector2(64, 64)
-	$Player.set_frozen(true)
+	# $Player.set_frozen(true)
 	$Player.stop_censor_camera()
-	$Player/Camera2D/MessageBox.set_message("Welcome to\nPOKeMON")
-	$Player/Camera2D/MessageBox.open()
+	# $Player/Camera2D/MessageBox.set_message("Welcome to\nPOKeMON")
+	# $Player/Camera2D/MessageBox.open()
 	
 func load_level(level_name: String):
 	var level_resource = load("res://Levels/" + level_name + ".tscn")
@@ -33,9 +32,9 @@ func load_level(level_name: String):
 		
 	return false
 
-func load_level_at_spawn(level_name: String, spawn_name: String):
+func load_level_at_spawn_point(level_name: String, spawn_point_name: String):
 	if load_level(level_name):
-		_level.spawn_at(spawn_name)
+		_level.spawn_at(spawn_point_name)
 		
 		return true
 		

@@ -1,12 +1,9 @@
-[gd_scene load_steps=104 format=2]
+[gd_scene load_steps=103 format=2]
 
 [ext_resource path="res://Scripts/Levels.gd" type="Script" id=1]
 [ext_resource path="res://Media/tiles.png" type="Texture" id=2]
 [ext_resource path="res://Levels/Sign2.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scripts/SpawnPoint.gd" type="Script" id=5]
-
-[sub_resource type="RectangleShape2D" id=99]
-extents = Vector2( 16, 16 )
+[ext_resource path="res://Levels/SpawnPoint.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -916,17 +913,10 @@ message = "POKeMON is gey AF"
 
 [node name="SpawnPoints" type="Node" parent="."]
 
-[node name="East" type="Area2D" parent="SpawnPoints"]
+[node name="East" parent="SpawnPoints" instance=ExtResource( 4 )]
 position = Vector2( 352, 64 )
-z_index = 1
-script = ExtResource( 5 )
-entrance = Vector2( -32, 0 )
-level_name = "Level2"
-spawn_name = "West"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnPoints/East"]
-position = Vector2( 16, 16 )
-shape = SubResource( 99 )
+spawn_point_name = "West"
+exit_direction = 1
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 98 )
