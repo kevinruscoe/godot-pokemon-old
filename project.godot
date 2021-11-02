@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="Pokemon"
-run/main_scene="res://Levels/World.tscn"
+run/main_scene="res://Scenes/Game.tscn"
 config/icon="res://icon.png"
 
 [display]

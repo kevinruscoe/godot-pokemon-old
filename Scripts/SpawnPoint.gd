@@ -2,20 +2,15 @@ extends Area2D
 
 enum DIRECTIONS {NORTH, EAST, SOUTH, WEST}
 
-export var level_name: String
+export(String, FILE, "*.tscn") var scene_path: String
 export var spawn_point_name: String
 export(DIRECTIONS) var exit_direction = DIRECTIONS.NORTH
 
-var _world
-var _player
-
-onready var _exit: CollisionShape2D = $Exit
-
-func _ready():
-	_world = get_tree().get_nodes_in_group("world")[0]
-	_player = get_tree().get_nodes_in_group("player")[0]
+signal transition_to_spawn
 	
+func _ready():
 	connect("body_entered", self, "_on_body_entered")
+	connect("transition_to_spawn", get_node("/root/Game/LevelManager"), "_on_transition_to_spawn")
 
 func get_entrace_position():
 	if exit_direction == DIRECTIONS.NORTH:
@@ -30,5 +25,6 @@ func get_entrace_position():
 	return position
 	
 func _on_body_entered(body):
+	print(body, get_node("/root/Game/Player"))
 	if body.is_in_group("player"):
-		_world.load_level_at_spawn_point(self.level_name, self.spawn_point_name)
+		emit_signal("transition_to_spawn", self.scene_path, self.spawn_point_name)

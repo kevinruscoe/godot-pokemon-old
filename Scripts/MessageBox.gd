@@ -11,11 +11,13 @@ var _text_cursor: int = 0
 var _is_open: bool = false
 var _default_speed: float = 0.15
 
+signal message_opened
 signal message_started
 signal message_finished
+signal message_closed
 
 func _ready():
-	_reset()
+	self._reset()
 
 func set_message(message):
 	self._message = message
@@ -23,6 +25,8 @@ func set_message(message):
 func open():
 	if self._message == "":
 		return
+		
+	emit_signal("message_opened")
 
 	self._is_open = true
 	self._nine_patch_rect.set_visible(_is_open)
@@ -34,6 +38,8 @@ func open():
 func close():
 	if ! self.closable():
 		return
+		
+	emit_signal("message_closed")
 		
 	self._reset()
 	
@@ -57,9 +63,9 @@ func _has_message_been_shown():
 	
 func _process(_delta):
 	if Input.is_action_pressed("ui_accept"):
-		self._timer.set_wait_time(_default_speed / 6)
+		self._timer.set_wait_time(self._default_speed / 6)
 	else:
-		self._timer.set_wait_time(_default_speed)
+		self._timer.set_wait_time(self._default_speed)
 		
 	if len(self._total_message_shown) < len(self._message) && self._timer.is_stopped():
 		

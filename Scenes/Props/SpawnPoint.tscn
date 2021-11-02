@@ -8,7 +8,6 @@ extents = Vector2( 16, 16 )
 [node name="SpawnPoint" type="Area2D"]
 z_index = 1
 script = ExtResource( 1 )
-level_name = "Level2"
 
 [node name="Exit" type="CollisionShape2D" parent="."]
 position = Vector2( 16, 16 )

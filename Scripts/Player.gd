@@ -14,7 +14,6 @@ var _input_vector_dict = {
 	"ui_right": Vector2.RIGHT
 }
 var _frozen: bool = false
-var _forced_position = null
 
 onready var _tween: Tween = $Tween
 onready var _animated_sprite: AnimatedSprite = $AnimatedSprite
@@ -100,24 +99,22 @@ func set_frozen(value):
 
 func get_frozen():
 	return self._frozen
-
-func _on_tween_started(_object, _key):
-	self._moving = true
-	
-	if self._forced_position:
-		self._tween.stop_all()
-		self.censor_camera()
-	
-func _on_tween_completed(_object, _key):
-	self.stop_moving()
 	
 func stop_moving():
 	self._moving = false
 	self._animated_sprite.stop()
 	self._animated_sprite.set_frame(0)
 	
-func censor_camera():
-	$Camera2D/ColorRect.visible = true
+func _freeze_for_transition():
+	self.set_frozen(true)
+	self._tween.stop_all()
+	self.stop_moving()
+
+func _unfreeze_for_transition():
+	self.set_frozen(false)
 	
-func stop_censor_camera():
-	$Camera2D/ColorRect.visible = false
+func _on_tween_started(_object, _key):
+	self._moving = true
+	
+func _on_tween_completed(_object, _key):
+	self.stop_moving()
