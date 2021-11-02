@@ -1,9 +1,10 @@
 extends CanvasLayer
 
-onready var _camera: Camera2D
 onready var _nine_patch_rect: NinePatchRect = $NinePatchRect
 onready var _rich_text_label: RichTextLabel = $NinePatchRect/RichTextLabel
 onready var _timer: Timer = $Timer
+
+var _player: KinematicBody2D
 
 var _message: String = ""
 var _total_message_shown: String = ""
@@ -17,6 +18,11 @@ signal message_finished
 signal message_closed
 
 func _ready():
+	_player = get_node("/root/Game/Player")
+	
+	self.connect("message_opened", _player, "set_is_frozen", [true])
+	self.connect("message_closed", _player, "set_is_frozen", [false])
+	
 	self._reset()
 
 func set_message(message):

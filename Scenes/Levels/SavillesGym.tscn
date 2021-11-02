@@ -907,10 +907,10 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 [node name="SpawnPoints" type="Node" parent="."]
 
 [node name="SavillesGym" parent="SpawnPoints" instance=ExtResource( 4 )]
-position = Vector2( 128, 352 )
+position = Vector2( 160, 384 )
+rotation = 3.14159
 scene_path = "res://Scenes/Levels/Level2.tscn"
 spawn_point_name = "SpawnPoints/SavillesGym"
-exit_direction = 2
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 98 )

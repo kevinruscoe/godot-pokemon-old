@@ -21,12 +21,13 @@ func _unload_current_level():
 		_child.call_deferred("free")
 	
 func _spawn_at_position(_position: Vector2):
+	
 	self._player.position = _position
 	
 	yield(get_tree().create_timer(.5), "timeout")
 
 	self._scene_transition_effect_manager.hide()
-	self._player._unfreeze_for_transition()
+	self._player.set_is_frozen(false)
 		
 func _spawn_at_point(spawn_point_name: String):	
 	var _spawn_position = Vector2.ZERO
@@ -38,7 +39,7 @@ func _spawn_at_point(spawn_point_name: String):
 
 func _transition_scene(scene_path: String):
 	self._scene_transition_effect_manager.show()
-	self._player._freeze_for_transition()
+	self._player.set_is_frozen(true)
 	
 	self._unload_current_level()
 				

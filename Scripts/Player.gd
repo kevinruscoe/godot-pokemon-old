@@ -4,7 +4,8 @@ const TILE_SIZE: int = 32
 
 export var speed: float = 0.5
 
-var _moving: bool = false
+var _is_moving: bool = false
+var _is_frozen: bool = false
 var _last_motion_vector: Vector2 = Vector2.ZERO
 var _alternate_y_leg_animation: bool = true
 var _input_vector_dict = {
@@ -13,7 +14,6 @@ var _input_vector_dict = {
 	"ui_left": Vector2.LEFT,
 	"ui_right": Vector2.RIGHT
 }
-var _frozen: bool = false
 
 onready var _tween: Tween = $Tween
 onready var _animated_sprite: AnimatedSprite = $AnimatedSprite
@@ -25,7 +25,10 @@ func _ready():
 	self._tween.connect("tween_completed", self, "_on_tween_completed")
 	
 func _process_movement():
-	if ! self._moving:
+	if self.get_is_frozen():
+		return
+		
+	if ! self.get_is_moving():
 
 		var motion_vector = Vector2.ZERO
 		var animation_name
@@ -79,13 +82,15 @@ func _process_movement():
 				self._animated_sprite.play(animation_name)
 
 func _physics_process(_delta):
-	if get_frozen():
+	if self._is_frozen:
 		return
 
 	self._process_movement()
 	self._process_interactables()
 	
 func _process_interactables():
+	# TODO: We could change the spawn points to work like this?
+	
 	if Input.is_action_just_pressed("ui_accept"):
 		self._raycast.force_raycast_update()
 		if self._raycast.is_colliding():
@@ -94,27 +99,22 @@ func _process_interactables():
 			if collided_with.is_in_group("sign"):
 				collided_with.interact()
 
-func set_frozen(value):
-	self._frozen = value
-
-func get_frozen():
-	return self._frozen
+func set_is_frozen(value):
+	self._is_frozen = value
 	
-func stop_moving():
-	self._moving = false
-	self._animated_sprite.stop()
-	self._animated_sprite.set_frame(0)
+func get_is_frozen():
+	return self._is_frozen
 	
-func _freeze_for_transition():
-	self.set_frozen(true)
-	self._tween.stop_all()
-	self.stop_moving()
-
-func _unfreeze_for_transition():
-	self.set_frozen(false)
+func set_is_moving(value):
+	self._is_moving = value
+	
+func get_is_moving():
+	return self._is_moving
 	
 func _on_tween_started(_object, _key):
-	self._moving = true
+	self.set_is_moving(true)
 	
 func _on_tween_completed(_object, _key):
-	self.stop_moving()
+	self.set_is_moving(false)
+	self._animated_sprite.stop()
+	self._animated_sprite.set_frame(0)

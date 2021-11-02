@@ -912,16 +912,16 @@ message = "Jimmy Saville's Gym. We are CLOSED FOR SUMMER HOLIDAYS"
 [node name="SpawnPoints" type="Node" parent="."]
 
 [node name="West" parent="SpawnPoints" instance=ExtResource( 4 )]
-position = Vector2( -32, 64 )
+position = Vector2( -32, 96 )
+rotation = 4.71239
 scene_path = "res://Scenes/Levels/Level1.tscn"
 spawn_point_name = "SpawnPoints/East"
-exit_direction = 3
 
 [node name="South" parent="SpawnPoints" instance=ExtResource( 4 )]
-position = Vector2( 64, 288 )
+position = Vector2( 96, 320 )
+rotation = 3.14159
 scene_path = "res://Scenes/Levels/Level3.tscn"
 spawn_point_name = "SpawnPoints/North"
-exit_direction = 2
 
 [node name="SavillesGym" parent="SpawnPoints" instance=ExtResource( 4 )]
 position = Vector2( 192, 96 )

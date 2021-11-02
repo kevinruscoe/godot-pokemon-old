@@ -912,10 +912,10 @@ message = "POKeMON is gey AF"
 [node name="SpawnPoints" type="Node" parent="."]
 
 [node name="East" parent="SpawnPoints" instance=ExtResource( 4 )]
-position = Vector2( 352, 64 )
+position = Vector2( 384, 64 )
+rotation = 1.5708
 scene_path = "res://Scenes/Levels/Level2.tscn"
 spawn_point_name = "SpawnPoints/West"
-exit_direction = 1
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 98 )
