@@ -6,7 +6,6 @@ export var spawn_point_name: String
 signal transition_to_spawn
 	
 func _ready():
-	connect("body_entered", self, "_on_body_entered")
 	connect("transition_to_spawn", get_node("/root/Game/LevelManager"), "_on_transition_to_spawn")
 
 func get_entrace_position():

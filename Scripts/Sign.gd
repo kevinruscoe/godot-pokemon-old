@@ -17,7 +17,7 @@ func interact():
 	_message_box.set_message(get_message())
 	_message_box.open()
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("ui_accept"):
 		if _message_box.get_is_open():
 			if _message_box.closable():

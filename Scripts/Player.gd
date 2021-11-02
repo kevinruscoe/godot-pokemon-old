@@ -17,7 +17,6 @@ var _input_vector_dict = {
 
 onready var _tween: Tween = $Tween
 onready var _animated_sprite: AnimatedSprite = $AnimatedSprite
-onready var _message_box: CanvasLayer = $Camera2D/MessageBox
 onready var _raycast: RayCast2D = $RayCast2D
 
 func _ready():
@@ -59,7 +58,7 @@ func _process_movement():
 			self._last_motion_vector = motion_vector
 
 			# update raycast for interactables
-			self._raycast.set_cast_to(motion_vector * 16)
+			self._raycast.set_cast_to(motion_vector * 17) # no idea why 17 works, 16 had problems with lower object
 			self._raycast.force_raycast_update()
 
 			if not test_move(self.global_transform, motion_vector):
@@ -93,9 +92,7 @@ func _process_interactables():
 	
 	if self._raycast.is_colliding():
 		var collided_with = self._raycast.get_collider().get_parent()
-		
-		print(self._raycast.get_collider().get_parent().name)
-		
+
 		if collided_with.is_in_group("spawn_point"):
 			collided_with.transition()
 			
@@ -119,6 +116,6 @@ func _on_tween_started(_object, _key):
 	
 func _on_tween_completed(_object, _key):
 	self.set_is_moving(false)
-	# make as idle
+	# mark as idle
 	self._animated_sprite.stop()
 	self._animated_sprite.set_frame(0)
