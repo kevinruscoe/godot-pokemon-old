@@ -1,4 +1,4 @@
-extends Area2D
+extends Sprite
 
 export(String, FILE, "*.tscn") var scene_path: String
 export var spawn_point_name: String
@@ -22,7 +22,6 @@ func get_entrace_position():
 		return self.position + Vector2(32, -32)
 		
 	return self.position
-			
-func _on_body_entered(body):
-	if body == get_node("/root/Game/Player"):
-		emit_signal("transition_to_spawn", self.scene_path, self.spawn_point_name)
+	
+func transition():
+	emit_signal("transition_to_spawn", self.scene_path, self.spawn_point_name)

@@ -6,15 +6,18 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 16 )
 
-[node name="SpawnPoint" type="Area2D"]
-z_index = 1
-script = ExtResource( 1 )
-
-[node name="Exit" type="CollisionShape2D" parent="."]
-position = Vector2( 16, 16 )
-shape = SubResource( 1 )
-
-[node name="Sprite" type="Sprite" parent="."]
+[node name="SpawnPoint" type="Sprite" groups=[
+"spawn_point",
+]]
 modulate = Color( 1, 0, 0, 1 )
+z_index = 10
 texture = ExtResource( 2 )
 centered = false
+script = ExtResource( 1 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+z_index = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 16, 16 )
+shape = SubResource( 1 )

@@ -110,4 +110,4 @@ offset = Vector2( 8, 8 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 position = Vector2( 16, 16 )
-cast_to = Vector2( 0, -32 )
+cast_to = Vector2( 0, -16 )

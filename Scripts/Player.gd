@@ -59,7 +59,7 @@ func _process_movement():
 			self._last_motion_vector = motion_vector
 
 			# update raycast for interactables
-			self._raycast.set_cast_to(motion_vector * self.TILE_SIZE)
+			self._raycast.set_cast_to(motion_vector * 16)
 			self._raycast.force_raycast_update()
 
 			if not test_move(self.global_transform, motion_vector):
@@ -89,15 +89,18 @@ func _physics_process(_delta):
 	self._process_interactables()
 	
 func _process_interactables():
-	# TODO: We could change the spawn points to work like this?
+	self._raycast.force_raycast_update()
 	
-	if Input.is_action_just_pressed("ui_accept"):
-		self._raycast.force_raycast_update()
-		if self._raycast.is_colliding():
-			var collided_with = self._raycast.get_collider().get_parent()
-
-			if collided_with.is_in_group("sign"):
-				collided_with.interact()
+	if self._raycast.is_colliding():
+		var collided_with = self._raycast.get_collider().get_parent()
+		
+		print(self._raycast.get_collider().get_parent().name)
+		
+		if collided_with.is_in_group("spawn_point"):
+			collided_with.transition()
+			
+		if collided_with.is_in_group("sign") and Input.is_action_just_pressed("ui_accept"):
+			collided_with.interact()
 
 func set_is_frozen(value):
 	self._is_frozen = value
@@ -116,5 +119,6 @@ func _on_tween_started(_object, _key):
 	
 func _on_tween_completed(_object, _key):
 	self.set_is_moving(false)
+	# make as idle
 	self._animated_sprite.stop()
 	self._animated_sprite.set_frame(0)
