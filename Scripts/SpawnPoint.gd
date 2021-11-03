@@ -3,13 +3,18 @@ extends Sprite
 export(String, FILE, "*.tscn") var scene_path: String
 export var spawn_point_name: String
 
+var _level_manager: Node
+
 signal transition_to_spawn
+
+func _enter_tree():
+	self._level_manager = self.get_node("/root/Game/LevelManager")
 	
 func _ready():
-	connect("transition_to_spawn", get_node("/root/Game/LevelManager"), "_on_transition_to_spawn")
+	connect("transition_to_spawn", self._level_manager, "_on_transition_to_spawn")
 
 func get_entrace_position():
-	var rotation_degrees_normalized = int(round(rotation_degrees / 90) * 90)
+	var rotation_degrees_normalized = int(round(self.rotation_degrees / 90) * 90)
 	
 	if rotation_degrees_normalized == 0:
 		return self.position + Vector2(0, 32)
@@ -23,4 +28,4 @@ func get_entrace_position():
 	return self.position
 	
 func transition():
-	emit_signal("transition_to_spawn", self.scene_path, self.spawn_point_name)
+	self.emit_signal("transition_to_spawn", self.scene_path, self.spawn_point_name)

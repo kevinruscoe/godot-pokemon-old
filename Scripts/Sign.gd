@@ -2,11 +2,13 @@ extends Sprite
 
 export var message: String
 
-var _message_box: CanvasLayer
+var _ui_manager: Node
+var _message_box: Node
 	
-func _ready():
-	self._message_box = get_node("/root/Game/MessageBox")
-	
+func _enter_tree():
+	self._ui_manager = self.get_node("/root/Game/UIManager")
+	self._message_box = self._ui_manager.get_node("MessageBox")
+
 func get_message():
 	return self.message
 
@@ -14,11 +16,5 @@ func interact():
 	if len(self.message) <= 0:
 		return
 		
-	_message_box.set_message(get_message())
-	_message_box.open()
-
-func _process(_delta):
-	if Input.is_action_just_pressed("ui_accept"):
-		if _message_box.get_is_open():
-			if _message_box.closable():
-				_message_box.close()
+	self._message_box.set_message(get_message())
+	self._message_box.open()

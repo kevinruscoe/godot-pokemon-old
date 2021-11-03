@@ -17,12 +17,13 @@ signal message_started
 signal message_finished
 signal message_closed
 
-func _ready():
-	_player = get_node("/root/Game/Player")
+func _enter_tree():
+	self._player = get_node("/root/Game/Player")
 	
 	self.connect("message_opened", _player, "set_is_frozen", [true])
 	self.connect("message_closed", _player, "set_is_frozen", [false])
-	
+
+func _ready():
 	self._reset()
 
 func set_message(message):
@@ -32,7 +33,7 @@ func open():
 	if self._message == "":
 		return
 		
-	emit_signal("message_opened")
+	self.emit_signal("message_opened")
 
 	self._is_open = true
 	self._nine_patch_rect.set_visible(_is_open)
@@ -45,7 +46,7 @@ func close():
 	if ! self.closable():
 		return
 		
-	emit_signal("message_closed")
+	self.emit_signal("message_closed")
 		
 	self._reset()
 	
@@ -70,13 +71,18 @@ func _has_message_been_shown():
 func _process(_delta):
 	if Input.is_action_pressed("ui_accept"):
 		self._timer.set_wait_time(self._default_speed / 6)
+		
+		if self.get_is_open():
+			if self.closable():
+				self.close()
+				
 	else:
 		self._timer.set_wait_time(self._default_speed)
 		
 	if len(self._total_message_shown) < len(self._message) && self._timer.is_stopped():
 		
 		if self._text_cursor == 0:
-			emit_signal("message_started")
+			self.emit_signal("message_started")
 		
 		self._total_message_shown += self._message[self._text_cursor]
 		
@@ -87,4 +93,4 @@ func _process(_delta):
 		self._timer.start()
 		
 	if self._has_message_been_shown():
-		emit_signal("message_finished")
+		self.emit_signal("message_finished")

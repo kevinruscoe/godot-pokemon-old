@@ -15,13 +15,25 @@ var _input_vector_dict = {
 	"ui_right": Vector2.RIGHT
 }
 
-onready var _tween: Tween = $Tween
-onready var _animated_sprite: AnimatedSprite = $AnimatedSprite
-onready var _raycast: RayCast2D = $RayCast2D
+var _tween: Tween
+var _animated_sprite: AnimatedSprite
+var _raycast: RayCast2D
 
-func _ready():
+signal moving_started
+signal moving_completed
+signal has_frozen
+signal has_unfrozen
+
+func _enter_tree():
+	self._tween = self.get_node("Tween")
+	self._animated_sprite = self.get_node("AnimatedSprite")
+	self._raycast = self.get_node("RayCast2D")
+	
 	self._tween.connect("tween_started", self, "_on_tween_started")
 	self._tween.connect("tween_completed", self, "_on_tween_completed")
+
+func _ready():
+	pass
 	
 func _process_movement():
 	if self.get_is_frozen():
@@ -102,11 +114,21 @@ func _process_interactables():
 func set_is_frozen(value):
 	self._is_frozen = value
 	
+	if self._is_frozen:
+		emit_signal("has_frozen")
+	else:
+		emit_signal("has_unfrozen")
+	
 func get_is_frozen():
 	return self._is_frozen
 	
 func set_is_moving(value):
 	self._is_moving = value
+	
+	if self._is_moving:
+		emit_signal("moving_started")
+	else:
+		emit_signal("moving_completed")
 	
 func get_is_moving():
 	return self._is_moving

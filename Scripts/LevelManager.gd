@@ -1,14 +1,17 @@
 extends Node
 
 onready var _player: Node
-onready var _scene_transition_effect_manager
+onready var _scene_transition_effect_manager: Node
 
-func _ready():
+signal scene_unloaded
+signal scene_loaded
+signal spawned_in
 
-	_player = get_node("/root/Game/Player")
-	
-	_scene_transition_effect_manager = get_node("/root/Game/SceneTransitionEffectManager")
-	
+func _enter_tree():
+	self._player = self.get_node("/root/Game/Player")
+	self._scene_transition_effect_manager = self.get_node("/root/Game/SceneTransitionEffectManager")
+
+func _ready():	
 	self._load_default_level()
 	
 func _load_default_level():
@@ -19,16 +22,20 @@ func _unload_current_level():
 	for _child in self.get_children():
 		self.remove_child(_child)
 		_child.call_deferred("free")
+		
+	self.emit_signal("scene_unloaded")
 	
 func _spawn_at_position(_position: Vector2):
 	
 	self._player.position = _position
 	
-	yield(get_tree().create_timer(.5), "timeout")
+	yield(self.get_tree().create_timer(.5), "timeout")
 
 	self._scene_transition_effect_manager.hide()
 	self._player.set_is_frozen(false)
-		
+	
+	self.emit_signal("spawned_in")
+	
 func _spawn_at_point(spawn_point_name: String):	
 	var _spawn_position = Vector2.ZERO
 	
@@ -48,7 +55,9 @@ func _transition_scene(scene_path: String):
 	if loaded_scene:
 		var level = loaded_scene.instance()
 		self.add_child(level)
-	
+		
+		emit_signal("scene_loaded")
+		
 func _on_transition_to_spawn(scene_path, spawn_point_name):
 	self._transition_scene(scene_path)
 	self._spawn_at_point(spawn_point_name)
