@@ -28,4 +28,4 @@ func show():
 	
 func hide():
 	self._node_2d.visible = false
-	_message_boxemit_signal("transition_completed")
+	self.emit_signal("transition_completed")

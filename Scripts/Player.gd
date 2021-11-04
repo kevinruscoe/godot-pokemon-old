@@ -17,7 +17,10 @@ var _input_vector_dict = {
 
 var _tween: Tween
 var _animated_sprite: AnimatedSprite
+var _sprite: Sprite
 var _raycast: RayCast2D
+var _animation_tree: AnimationTree
+var _animation_player: AnimationPlayer
 
 signal moving_started
 signal moving_completed
@@ -69,8 +72,13 @@ func _process_movement():
 		if motion_vector:
 			self._last_motion_vector = motion_vector
 
+			var line = get_node("/root/Game/Line2D")
+			line.clear_points()
+			line.add_point(self.global_transform)
+			line.add_point( (self.global_transform) + motion_vector * 32 )
+
 			# update raycast for interactables
-			self._raycast.set_cast_to(motion_vector * 17) # no idea why 17 works, 16 had problems with lower object
+			self._raycast.set_cast_to(motion_vector * 32)
 			self._raycast.force_raycast_update()
 
 			if not test_move(self.global_transform, motion_vector):

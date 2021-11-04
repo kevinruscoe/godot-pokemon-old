@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Media/ash.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
@@ -24,35 +24,35 @@ region = Rect2( 144, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 16, 16 )
+region = Rect2( 64, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 16, 16 )
+region = Rect2( 48, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 16, 16 )
+region = Rect2( 96, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 1 )
-region = Rect2( 32, 0, 16, 16 )
+region = Rect2( 112, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 1 )
-region = Rect2( 64, 0, 16, 16 )
+region = Rect2( 16, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 1 )
-region = Rect2( 48, 0, 16, 16 )
+region = Rect2( 0, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=12]
 atlas = ExtResource( 1 )
-region = Rect2( 96, 0, 16, 16 )
+region = Rect2( 16, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=13]
 atlas = ExtResource( 1 )
-region = Rect2( 112, 0, 16, 16 )
+region = Rect2( 32, 0, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=14]
 animations = [ {
@@ -67,27 +67,73 @@ animations = [ {
 "speed": 4.0
 }, {
 "frames": [ SubResource( 6 ), SubResource( 7 ) ],
-"loop": false,
-"name": "Walk Down",
-"speed": 4.0
-}, {
-"frames": [ SubResource( 8 ), SubResource( 9 ) ],
-"loop": true,
-"name": "Walk Down 2",
-"speed": 4.0
-}, {
-"frames": [ SubResource( 10 ), SubResource( 11 ) ],
 "loop": true,
 "name": "Walk Up",
 "speed": 4.0
 }, {
-"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"frames": [ SubResource( 8 ), SubResource( 9 ) ],
 "loop": true,
 "name": "Walk Left",
 "speed": 4.0
+}, {
+"frames": [ SubResource( 10 ), SubResource( 11 ) ],
+"loop": false,
+"name": "Walk Down",
+"speed": 4.0
+}, {
+"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"loop": true,
+"name": "Walk Down 2",
+"speed": 4.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "New Anim",
+"speed": 5.0
 } ]
 
+[sub_resource type="AnimationNodeStateMachine" id=15]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=16]
+
+[sub_resource type="Animation" id=17]
+resource_name = "Walk Up"
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, -32, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1 )
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Sprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 4, 5 ]
+}
+
 [node name="Player" type="KinematicBody2D"]
+position = Vector2( 0, -23.0057 )
 z_index = 1
 script = ExtResource( 2 )
 
@@ -105,9 +151,28 @@ current = true
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
 frames = SubResource( 14 )
-animation = "Walk Up 2"
+animation = "New Anim"
 offset = Vector2( 8, 8 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 position = Vector2( 16, 16 )
-cast_to = Vector2( 0, -16 )
+enabled = true
+cast_to = Vector2( 0, -32 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 15 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 16 )
+
+[node name="Sprite" type="Sprite" parent="."]
+visible = false
+position = Vector2( 16, 16 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 1 )
+hframes = 10
+vframes = 3
+frame = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+"anims/Walk Up" = SubResource( 17 )
