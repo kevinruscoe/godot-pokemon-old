@@ -17,9 +17,9 @@ region_enabled = true
 region_rect = Rect2( 224, 192, 32, 64 )
 script = ExtResource( 1 )
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="Area2D" type="Area2D" parent="."]
 z_index = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 16, 16 )
 shape = SubResource( 1 )

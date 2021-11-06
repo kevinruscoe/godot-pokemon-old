@@ -1,8 +1,9 @@
 extends Node
 
 var _player: Node
-var _node_2d: Node2D
-var _color_rect: ColorRect
+onready var _node_2d: Node2D = $Node2D
+onready var _color_rect: ColorRect = $Node2D/ColorRect
+onready var _tween: Tween = $Node2D/Tween
 
 signal transition_started
 signal transition_completed
@@ -11,6 +12,7 @@ func _enter_tree():
 	self._player = get_node("/root/Game/Player")
 	self._node_2d = get_node("Node2D")
 	self._color_rect = self._node_2d.get_node("ColorRect")
+	self._tween = self._node_2d.get_node("Tween")
 
 	self.connect("transition_started", _player, "set_is_frozen", [true])
 	self.connect("transition_completed", _player, "set_is_frozen", [false])
@@ -24,8 +26,21 @@ func _process(delta):
 
 func show():
 	self.emit_signal("transition_started")
-	self._node_2d.visible = true
+	self._tween.interpolate_property(
+		self._color_rect,
+		"color", Color(0, 0, 0, 0), Color(0, 0, 0, 1), 
+		.5,
+		Tween.TRANS_LINEAR, Tween.EASE_IN
+	)
+	self._tween.start()
 	
 func hide():
-	self._node_2d.visible = false
+	self._tween.interpolate_property(
+		self._color_rect,
+		"color", Color(0, 0, 0, 1), Color(0, 0, 0, 0), 
+		.5,
+		Tween.TRANS_LINEAR, Tween.EASE_OUT
+	)
+	self._tween.start()
+
 	self.emit_signal("transition_completed")

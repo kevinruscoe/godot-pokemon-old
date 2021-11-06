@@ -926,7 +926,7 @@ spawn_point_name = "SpawnPoints/North"
 [node name="SavillesGym" parent="SpawnPoints" instance=ExtResource( 4 )]
 position = Vector2( 192, 96 )
 scene_path = "res://Scenes/Levels/SavillesGym.tscn"
-spawn_point_name = "SpawnPoints/SavillesGym"
+spawn_point_name = "SpawnPoints/SavillesGymSouth"
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 98 )

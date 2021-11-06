@@ -26,10 +26,7 @@ func _unload_current_level():
 	self.emit_signal("scene_unloaded")
 	
 func _spawn_at_position(_position: Vector2):
-	
 	self._player.position = _position
-	
-	yield(self.get_tree().create_timer(.5), "timeout")
 
 	self._scene_transition_effect_manager.hide()
 	self._player.set_is_frozen(false)
@@ -48,8 +45,10 @@ func _transition_scene(scene_path: String):
 	self._scene_transition_effect_manager.show()
 	self._player.set_is_frozen(true)
 	
+	self._player.reset_movement()
+	
 	self._unload_current_level()
-				
+
 	var loaded_scene = load(scene_path)
 	
 	if loaded_scene:
@@ -60,4 +59,5 @@ func _transition_scene(scene_path: String):
 		
 func _on_transition_to_spawn(scene_path, spawn_point_name):
 	self._transition_scene(scene_path)
+	
 	self._spawn_at_point(spawn_point_name)

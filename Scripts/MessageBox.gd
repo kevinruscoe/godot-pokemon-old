@@ -71,11 +71,11 @@ func _has_message_been_shown():
 func _process(_delta):
 	if Input.is_action_pressed("ui_accept"):
 		self._timer.set_wait_time(self._default_speed / 6)
-		
+
 		if self.get_is_open():
 			if self.closable():
 				self.close()
-				
+
 	else:
 		self._timer.set_wait_time(self._default_speed)
 		
